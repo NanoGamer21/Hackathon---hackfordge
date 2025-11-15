@@ -1,19 +1,15 @@
 import streamlit as st
 import requests, urllib.parse, secrets
 
-# Page setup
 st.set_page_config(page_title="Room Reserve", page_icon="🎓")
 
-# Load secrets from Streamlit Cloud
 CLIENT_ID = st.secrets["google"]["client_id"]
 CLIENT_SECRET = st.secrets["google"]["client_secret"]
 REDIRECT_URI = st.secrets["google"]["redirect_uri"]
 
-# Google OAuth endpoints
 AUTH_URL = "https://accounts.google.com/o/oauth2/v2/auth"
 TOKEN_URL = "https://oauth2.googleapis.com/token"
 USERINFO_URL = "https://www.googleapis.com/oauth2/v3/userinfo"
-
 
 def login_link(state):
     params = {
@@ -24,10 +20,9 @@ def login_link(state):
         "access_type": "offline",
         "prompt": "consent",
         "state": state,
-        "hd": "sdsu.edu",  # Hint Google to show SDSU accounts
+        "hd": "sdsu.edu",
     }
     return f"{AUTH_URL}?{urllib.parse.urlencode(params)}"
-
 
 def exchange_code(code):
     data = {
@@ -41,20 +36,14 @@ def exchange_code(code):
     r.raise_for_status()
     return r.json()
 
-
 def get_user_info(token):
-    r = requests.get(
-        USERINFO_URL, headers={"Authorization": f"Bearer {token}"}, timeout=15
-    )
+    r = requests.get(USERINFO_URL, headers={"Authorization": f"Bearer {token}"}, timeout=15)
     r.raise_for_status()
     return r.json()
 
-
-# Generate a secure state token
 if "state" not in st.session_state:
     st.session_state.state = secrets.token_urlsafe(16)
 
-# Handle OAuth callback
 qs = st.experimental_get_query_params()
 if "code" in qs:
     try:
@@ -63,24 +52,22 @@ if "code" in qs:
         email = (user.get("email") or "").lower()
         if email.endswith("@sdsu.edu"):
             st.session_state.user = user
-            st.experimental_set_query_params()  # Clear URL
+            st.experimental_set_query_params()
         else:
             st.error("Only @sdsu.edu accounts allowed. Please switch accounts.")
     except Exception as e:
         st.error(f"Login failed. {e}")
 
-
 # ---------------- UI Section ----------------
-# Header with SDSU logo + Room Reserve title
 st.markdown(
-    
+    """
     <style>
         .header-container {
             display: flex;
             flex-direction: column;
             align-items: center;
             justify-content: flex-start;
-            margin-top: 40px; 
+            margin-top: 40px;
         }
         .header-inner {
             display: flex;
@@ -101,10 +88,9 @@ st.markdown(
             <h1>Room Reserve</h1>
         </div>
     </div>
-
-    unsafe_allow_html=True
+    """,
+    unsafe_allow_html=True,
 )
-
 
 if "user" in st.session_state:
     u = st.session_state.user
@@ -127,7 +113,7 @@ else:
             justify-content: center;
             gap: 10px;
             padding: 12px 20px;
-            background-color: #C41E3A; /* SDSU red */
+            background-color: #C41E3A;
             color: white;
             border-radius: 8px;
             font-size: 16px;
