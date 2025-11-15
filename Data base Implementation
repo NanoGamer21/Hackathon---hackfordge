@@ -10,6 +10,7 @@ Database Data
   - ClassID : Int
   - Class Location : String
   - Avalibility : Boolean
+    - This is computed by the creation of a reservation
   - Name of Event : String
   - Event Descrption : String 
   - Class Room Capacity : Int
