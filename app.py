@@ -80,7 +80,7 @@ st.markdown(
             flex-direction: column;
             align-items: center;
             justify-content: flex-start;
-            margin-top: -40px; 
+            margin-top: 40px; 
         }
         .header-inner {
             display: flex;
