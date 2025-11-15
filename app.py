@@ -2,7 +2,7 @@ import streamlit as st
 import requests, urllib.parse, secrets
 
 # Page setup
-st.set_page_config(page_title="SDSU App Portal", page_icon="🎓")
+st.set_page_config(page_title="Room Reserve", page_icon="🎓")
 
 # Load secrets from Streamlit Cloud
 CLIENT_ID = st.secrets["google"]["client_id"]
@@ -71,7 +71,16 @@ if "code" in qs:
 
 
 # ---------------- UI Section ----------------
-st.title("🎓 SDSU App Portal")
+# Header with SDSU logo + Room Reserve title
+st.markdown(
+    """
+    <div style="display:flex; align-items:center; gap:15px; margin-bottom:10px;">
+        <img src="https://upload.wikimedia.org/wikipedia/en/3/3d/San_Diego_State_Aztecs_logo.svg" width="50">
+        <h1 style="margin:0;">Room Reserve</h1>
+    </div>
+    """,
+    unsafe_allow_html=True,
+)
 
 if "user" in st.session_state:
     u = st.session_state.user
