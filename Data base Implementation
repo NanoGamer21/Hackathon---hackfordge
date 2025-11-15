@@ -33,3 +33,12 @@ Faculty
   - They can see
     - Prexisting Events created by other users
     - Their reservations
+
+Availability
+  - Variables we need to check
+    - Class (ClassID and Location)
+    - Current Time
+    - Check list of classes/events going on in that class, and their time ranges
+    - Check if the current time is between any of these times
+    - If so, set boolean (availability) to false
+    - Otherwise, set boolean to true
