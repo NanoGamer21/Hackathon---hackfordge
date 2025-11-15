@@ -41,9 +41,11 @@ def get_user_info(token):
     r.raise_for_status()
     return r.json()
 
+# CSRF state
 if "state" not in st.session_state:
     st.session_state.state = secrets.token_urlsafe(16)
 
+# OAuth callback
 qs = st.experimental_get_query_params()
 if "code" in qs:
     try:
@@ -52,13 +54,18 @@ if "code" in qs:
         email = (user.get("email") or "").lower()
         if email.endswith("@sdsu.edu"):
             st.session_state.user = user
-            st.experimental_set_query_params()
+            st.experimental_set_query_params()  # clean URL
+            # Redirect to Search page after login
+            try:
+                st.switch_page("pages/SearchP.py")
+            except Exception:
+                st.experimental_rerun()
         else:
             st.error("Only @sdsu.edu accounts allowed. Please switch accounts.")
     except Exception as e:
         st.error(f"Login failed. {e}")
 
-# ---------------- UI Section ----------------
+# ---------------- UI ----------------
 st.markdown(
     """
     <style>
@@ -96,6 +103,7 @@ if "user" in st.session_state:
     u = st.session_state.user
     st.success(f"Welcome, {u.get('name') or u.get('email')} ✅")
     st.caption(u.get("email", ""))
+    st.page_link("pages/SearchP.py", label="Go to Search", icon="🔎")
     if st.button("Sign out"):
         st.session_state.pop("user", None)
         st.experimental_set_query_params()
@@ -121,25 +129,22 @@ else:
             text-decoration: none;
             transition: background-color 0.2s ease;
         }}
-        .sdsu-login:hover {{
-            background-color: #a9152f;
-        }}
+        .sdsu-login:hover {{ background-color: #a9152f; }}
         .sdsu-login img {{
-            background: white;
-            border-radius: 50%;
-            padding: 2px;
+            background: white; border-radius: 50%; padding: 2px;
         }}
-        .center {{
-            display: flex;
-            justify-content: center;
-            margin-top: 60px;
-        }}
+        .center {{ display: flex; justify-content: center; margin-top: 60px; }}
         </style>
         <div class="center">
             <a href="{url}" class="sdsu-login">
                 <img src="https://www.gstatic.com/firebasejs/ui/2.0.0/images/auth/google.svg" width="22" height="22">
                 Sign in with SDSU (Google)
             </a>
+        </div>
+        """,
+        unsafe_allow_html=True,
+    )
+
         </div>
         """,
         unsafe_allow_html=True,
