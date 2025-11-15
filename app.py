@@ -1,15 +1,26 @@
 import streamlit as st
-from streamlit_login_auth_ui.widgets import __login__
 
-__login__obj = __login__(auth_token = "courier_auth_token", 
-                    company_name = "Shims",
-                    width = 200, height = 250, 
-                    logout_button_name = 'Logout', hide_menu_bool = False, 
-                    hide_footer_bool = False, 
-                    lottie_url = 'https://assets2.lottiefiles.com/packages/lf20_jcikwtux.json')
+st.set_page_config(page_title="My App", page_icon="🔑")
 
-LOGGED_IN = __login__obj.build_login_ui()
+# simple session flag
+if "authed" not in st.session_state:
+    st.session_state.authed = False
 
-if LOGGED_IN == True:
+if not st.session_state.authed:
+    st.title("Sign in")
+    with st.form("login"):
+        pw = st.text_input("Passcode", type="password")
+        go = st.form_submit_button("Enter")
+    if go:
+        if pw == st.secrets.get("APP_PASSCODE"):
+            st.session_state.authed = True
+            st.success("Signed in!")
+            st.rerun()
+        else:
+            st.error("Invalid passcode.")
+    st.stop()
 
-    st.markown("Your Streamlit Application Begins here!")
+# ---- protected content below ----
+st.sidebar.button("Log out", on_click=lambda: (st.session_state.update(authed=False), st.rerun()))
+st.title("Welcome 👋")
+st.write("Your Streamlit application begins here!")
