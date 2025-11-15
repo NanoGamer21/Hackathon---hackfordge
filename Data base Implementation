@@ -1,0 +1,35 @@
+Data base Implementation
+
+Types of Users:
+  - Administrator
+  - Faculty
+  - Student
+  - Facilities
+
+Database Data
+  - ClassID : Int
+  - Class Location : String
+  - Avalibility : Boolean
+  - Name of Event : String
+  - Event Descrption : String 
+  - Class Room Capacity : Int
+  - Time of event : Int/time
+  - Date and Time of reservation : Int/DATE & Int/time
+  - Date and Time of creation : Int/DATE & Int/time
+  - User Name : String
+  - User ID : Int
+  - User Type : Int 
+
+Administrator
+  - Make Changes to database
+    - Avalibility
+    - Capacity 
+  - Can See
+    - See all of the information
+
+Faculty
+  - Create Reservations
+  - Has a higher Priority than student
+  - They can see
+    - Prexisting Events created by other users
+    - Their reservations
