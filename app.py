@@ -73,14 +73,38 @@ if "code" in qs:
 # ---------------- UI Section ----------------
 # Header with SDSU logo + Room Reserve title
 st.markdown(
-    """
-    <div style="display:flex; align-items:center; gap:15px; margin-bottom:50px;">
-       <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/7/7c/San_Diego_State_Aztecs_logo.svg/2560px-San_Diego_State_Aztecs_logo.svg.png" width="200">
-        <h1 style="margin:0;">Room Reserve</h1>
+    
+    <style>
+        .header-container {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: flex-start;
+            margin-top: -40px; 
+        }
+        .header-inner {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+        }
+        .header-inner h1 {
+            margin: 0;
+            font-family: sans-serif;
+            font-size: 38px;
+        }
+    </style>
+
+    <div class="header-container">
+        <div class="header-inner">
+            <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/5/59/San_Diego_State_University_primary_logo.svg/2560px-San_Diego_State_University_primary_logo.svg.png"
+                 width="280" style="margin-top:-10px;">
+            <h1>Room Reserve</h1>
+        </div>
     </div>
-    """,
-    unsafe_allow_html=True,
+
+    unsafe_allow_html=True
 )
+
 
 if "user" in st.session_state:
     u = st.session_state.user
