@@ -75,7 +75,7 @@ if "code" in qs:
 st.markdown(
     """
     <div style="display:flex; align-items:center; gap:15px; margin-bottom:10px;">
-       <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/7/7c/San_Diego_State_Aztecs_logo.svg/2560px-San_Diego_State_Aztecs_logo.svg.png" width="300">
+       <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/7/7c/San_Diego_State_Aztecs_logo.svg/2560px-San_Diego_State_Aztecs_logo.svg.png" width="200">
         <h1 style="margin:0;">Room Reserve</h1>
     </div>
     """,
