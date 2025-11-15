@@ -75,7 +75,7 @@ if "code" in qs:
 st.markdown(
     """
     <div style="display:flex; align-items:center; gap:15px; margin-bottom:10px;">
-        <img src="https://upload.wikimedia.org/wikipedia/en/3/3d/San_Diego_State_Aztecs_logo.svg" width="50">
+       <img src="https://brand.sdsu.edu/_images/_logo-section/downloads/1000-horizontal-full-color.jpg" width="50">
         <h1 style="margin:0;">Room Reserve</h1>
     </div>
     """,
