@@ -1,12 +1,15 @@
 import streamlit as st
 import requests, urllib.parse, secrets
 
+# Page configuration
 st.set_page_config(page_title="Room Reserve", page_icon="🎓")
 
+# Google OAuth credentials from secrets
 CLIENT_ID = st.secrets["google"]["client_id"]
 CLIENT_SECRET = st.secrets["google"]["client_secret"]
 REDIRECT_URI = st.secrets["google"]["redirect_uri"]
 
+# OAuth endpoints
 AUTH_URL = "https://accounts.google.com/o/oauth2/v2/auth"
 TOKEN_URL = "https://oauth2.googleapis.com/token"
 USERINFO_URL = "https://www.googleapis.com/oauth2/v3/userinfo"
@@ -41,9 +44,11 @@ def get_user_info(token):
     r.raise_for_status()
     return r.json()
 
+# Create state token if not present
 if "state" not in st.session_state:
     st.session_state.state = secrets.token_urlsafe(16)
 
+# Handle OAuth callback
 qs = st.experimental_get_query_params()
 if "code" in qs:
     try:
@@ -52,17 +57,19 @@ if "code" in qs:
         email = (user.get("email") or "").lower()
         if email.endswith("@sdsu.edu"):
             st.session_state.user = user
-            st.experimental_set_query_params()
+            st.experimental_set_query_params()  # clear the query params
+            # Redirect to SearchP page after login
             try:
                 st.switch_page("pages/SearchP.py")
             except Exception:
-                st.experimental_rerun()
+                # fallback: just show a link if switch_page isn't supported
+                st.markdown("[Continue to Search Page →](pages/SearchP.py)", unsafe_allow_html=True)
         else:
             st.error("Only @sdsu.edu accounts allowed. Please switch accounts.")
     except Exception as e:
-        st.error(f"Login failed. {e}")
+        st.error(f"Login failed: {e}")
 
-# UI Header
+# UI: Header with logo + title
 st.markdown(
     """
     <style>
@@ -70,7 +77,6 @@ st.markdown(
             display: flex;
             flex-direction: column;
             align-items: center;
-            justify-content: flex-start;
             margin-top: 40px;
         }
         .header-inner {
@@ -84,7 +90,6 @@ st.markdown(
             font-size: 38px;
         }
     </style>
-
     <div class="header-container">
         <div class="header-inner">
             <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/5/59/San_Diego_State_University_primary_logo.svg/2560px-San_Diego_State_University_primary_logo.svg.png"
@@ -96,10 +101,12 @@ st.markdown(
     unsafe_allow_html=True,
 )
 
+# If user is already logged in
 if "user" in st.session_state:
     u = st.session_state.user
     st.success(f"Welcome, {u.get('name') or u.get('email')} ✅")
     st.caption(u.get("email", ""))
+    # Show a link button to search page also
     st.page_link("pages/SearchP.py", label="Go to Search", icon="🔎")
     if st.button("Sign out"):
         st.session_state.pop("user", None)
@@ -128,16 +135,24 @@ else:
         }}
         .sdsu-login:hover {{ background-color: #a9152f; }}
         .sdsu-login img {{
-            background: white; border-radius: 50%; padding: 2px;
+            background: white;
+            border-radius: 50%;
+            padding: 2px;
         }}
-        .center {{ display: flex; justify-content: center; margin-top: 60px; }}
+        .center {{
+            display: flex;
+            justify-content: center;
+            margin-top: 60px;
+        }}
         </style>
         <div class="center">
             <a href="{url}" class="sdsu-login">
-                <img src="https://www.gstatic.com/firebasejs/ui/2.0.0/images/auth/google.svg" width="22" height="22">
+                <img src="https://www.gstatic.com/firebasejs/ui/2.0.0/images/auth/google.svg"
+                     width="22" height="22">
                 Sign in with SDSU (Google)
             </a>
         </div>
         """,
         unsafe_allow_html=True,
     )
+
