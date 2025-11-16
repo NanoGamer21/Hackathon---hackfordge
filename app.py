@@ -149,7 +149,7 @@ else:
             <a href="{url}" class="sdsu-login">
                 <img src="https://www.gstatic.com/firebasejs/ui/2.0.0/images/auth/google.svg"
                      width="22" height="22">
-                Sign in with SDSU (Google)
+                Sign in with SDSU
             </a>
         </div>
         """,
