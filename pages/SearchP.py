@@ -50,7 +50,7 @@ logo_url = "https://upload.wikimedia.org/wikipedia/commons/thumb/7/7c/San_Diego_
 
 col_title, col_logo = st.columns([8, 1])
 with col_title:
-    st.markdown("<h1 style='margin:0'>Search a Subject</h1>", unsafe_allow_html=True)
+    st.markdown("<h1 style='margin:0'>Search Topics</h1>", unsafe_allow_html=True)
 with col_logo:
     st.image(logo_url, width=120)
 
