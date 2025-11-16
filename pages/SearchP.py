@@ -20,8 +20,8 @@ h1, h2, h3, h4, h5, h6{
 </style>
 """, unsafe_allow_html=True)
 
-# Demo data
-TOPICS = ["Dungeons & Dragons", "CS Study Sesh", "LOCKIN IN ON EXAMS", "Math Club", "Clash Royale"]
+# Demo/base data
+BASE_TOPICS = ["Dungeons & Dragons", "CS Study Sesh", "LOCKIN IN ON EXAMS", "Math Club", "Clash Royale"]
 TIMES = ["8:00–8:30 AM", "8:30–9:00 AM", "9:00–9:30 AM", "9:30–10:00 AM",
          "10:00–10:30 AM", "10:30–11:00 AM", "11:00–11:30 AM", "11:30–12:00 PM"]
 BUILDINGS = ["ARTHN", "AH", "AL", "BT", "COMM", "E", "ENS", "FAC", "GMCS"]
@@ -46,6 +46,13 @@ def build_demo_events(topic: str, n: int = 3):
         })
     return events
 
+def get_topics():
+    topics = set(BASE_TOPICS)
+    for e in st.session_state.get("events", []):
+        if e.get("topic"):
+            topics.add(e["topic"])
+    return sorted(topics, key=str.casefold)
+
 logo_url = "https://upload.wikimedia.org/wikipedia/commons/thumb/7/7c/San_Diego_State_Aztecs_logo.svg/2560px-San_Diego_State_Aztecs_logo.svg.png"
 
 col_title, col_logo = st.columns([8, 1])
@@ -54,17 +61,22 @@ with col_title:
 with col_logo:
     st.image(logo_url, width=120)
 
+topics = get_topics()
+default_idx = topics.index(st.session_state["choice"]) if st.session_state.get("choice") in topics else None
+
 choice = st.selectbox(
     "Choose a topic (type to filter):",
-    options=sorted(TOPICS, key=str.casefold),
-    index=None,
+    options=topics,
+    index=default_idx,
     placeholder="Search"
 )
 
 if st.button("See Events", use_container_width=True):
     if choice:
         st.session_state.choice = choice
-        st.session_state.events = build_demo_events(choice, n=3)
+        # Only build fresh demo events if none exist yet for this topic
+        if not st.session_state.get("events"):
+            st.session_state.events = build_demo_events(choice, n=3)
         st.switch_page("pages/ExistingEvent.py")
     else:
         st.warning("Please select a topic from the dropdown.")
@@ -72,4 +84,3 @@ if st.button("See Events", use_container_width=True):
 st.write("Don't see an event you like?")
 if st.button("Create one!", use_container_width=True):
     st.switch_page("pages/CreatingEvent.py")
-
