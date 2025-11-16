@@ -4,4 +4,4 @@ import streamlit as st
 st.set_page_config(page_title="Room Reserve", page_icon="🎓")
 
 # Redirect straight to the Login page (keeps root `app.py` as the entrypoint Streamlit expects).
-st.switch_page("pages/Login")
+st.switch_page("pages/Login.py")
