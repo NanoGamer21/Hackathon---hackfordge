@@ -41,11 +41,9 @@ def get_user_info(token):
     r.raise_for_status()
     return r.json()
 
-# CSRF state
 if "state" not in st.session_state:
     st.session_state.state = secrets.token_urlsafe(16)
 
-# OAuth callback
 qs = st.experimental_get_query_params()
 if "code" in qs:
     try:
@@ -54,8 +52,7 @@ if "code" in qs:
         email = (user.get("email") or "").lower()
         if email.endswith("@sdsu.edu"):
             st.session_state.user = user
-            st.experimental_set_query_params()  # clean URL
-            # Redirect to Search page after login
+            st.experimental_set_query_params()
             try:
                 st.switch_page("pages/SearchP.py")
             except Exception:
@@ -65,7 +62,7 @@ if "code" in qs:
     except Exception as e:
         st.error(f"Login failed. {e}")
 
-# ---------------- UI ----------------
+# UI Header
 st.markdown(
     """
     <style>
