@@ -77,7 +77,7 @@ with col1:
             st.session_state.joined_event = sel
             st.success(f"You joined '{sel['title']}' at {sel['building']} {sel['room']} at {sel['time']}. Enjoy!")
 with col2:
-    if st.button("Shuffle suggestions", use_container_width=True):
+    if st.button("Reload", use_container_width=True):
         st.session_state.events = build_demo_events(topic, n=3)
         st.rerun()
 
