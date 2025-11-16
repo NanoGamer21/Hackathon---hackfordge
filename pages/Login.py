@@ -104,8 +104,8 @@ st.markdown(
       .sdsu-login:visited,
       .sdsu-login:hover,
       .sdsu-login:active {
-        color: inherit;               /* kill blue/purple link colors */
-        text-decoration: none;        /* remove underline */
+        color: inherit;
+        text-decoration: none;
       }
       .sdsu-login {
         display: inline-flex;
@@ -114,32 +114,28 @@ st.markdown(
         gap: 10px;
         padding: 12px 20px;
         border-radius: 8px;
-        border: 0;                    /* no inner border; only outer card shows */
+        border: 0;
         font-size: 16px;
         font-weight: 600;
         background: transparent;
         box-shadow: none;
         cursor: pointer;
-        -webkit-tap-highlight-color: transparent;  /* remove mobile blue tap flash */
-        outline: none;                 /* remove default blue focus ring */
+        -webkit-tap-highlight-color: transparent;
+        outline: none;
         transition: background-color .2s ease, transform .05s ease;
       }
-      /* Darker hover for both themes */
       @media (prefers-color-scheme: light), (prefers-color-scheme: no-preference) {
-        .sdsu-login:hover { background: rgba(0,0,0,0.12); }  /* darker than before */
+        .sdsu-login:hover { background: rgba(0,0,0,0.12); }
       }
       @media (prefers-color-scheme: dark) {
-        .sdsu-login:hover { background: rgba(255,255,255,0.18); } /* darker in dark mode */
+        .sdsu-login:hover { background: rgba(255,255,255,0.18); }
       }
       .sdsu-login:active { transform: translateY(1px); }
-      /* Optional custom focus (subtle, non-blue) for accessibility */
       .sdsu-login:focus-visible {
         box-shadow: 0 0 0 3px rgba(0,0,0,0.25);
       }
       @media (prefers-color-scheme: dark) {
-        .sdsu-login:focus-visible {
-          box-shadow: 0 0 0 3px rgba(255,255,255,0.25);
-        }
+        .sdsu-login:focus-visible { box-shadow: 0 0 0 3px rgba(255,255,255,0.25); }
       }
 
       /* Keep the Google icon readable */
@@ -169,8 +165,8 @@ st.markdown(
 
     <div class="header-container">
       <div class="header-inner">
-        <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/5/59/San_Diego_State_University_primary_logo.svg/2560px-San_Diego_State_University_primary_logo.svg.png"
-             width="240" style="margin-top:-6px;">
+        <img src="https://brand.sdsu.edu/_images/_logo-section/downloads/1000-monogram-white.jpg"
+             width="240" style="margin-top:-6px;" alt="SDSU Monogram">
         <h1>Aztec Reserve</h1>
       </div>
     </div>
