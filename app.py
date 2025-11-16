@@ -106,6 +106,18 @@ if "user" in st.session_state:
     u = st.session_state.user
     st.success(f"Welcome, {u.get('name') or u.get('email')} ✅")
     st.caption(u.get("email", ""))
+    # Add this right BEFORE your st.page_link(...) or st.switch_page(...) call
+
+# DEBUG: inspect session state and registered pages
+st.write("DEBUG — session_state:", dict(st.session_state))
+
+try:
+    pages_info = st._internal_page_registry.get_all_pages()
+    st.write("DEBUG — registered pages:")
+    for p in pages_info:
+        st.write(p)  # prints name, url_pathname, etc.
+except Exception as e:
+    st.write("DEBUG — could not get internal page registry:", e)
     # Show a link button to search page also
     st.page_link("pages/SearchP.py", label="Go to Search", icon="🔎")
     if st.button("Sign out"):
