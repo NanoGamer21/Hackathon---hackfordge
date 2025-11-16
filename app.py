@@ -59,7 +59,7 @@ if "code" in qs:
             st.session_state.user = user
             st.experimental_set_query_params()  # clear the query params
             # Redirect to SearchP page after login
-            st.switch_page("pages/SearchP.py")
+            st.switch_page("SearchP")
         else:
             st.error("Only @sdsu.edu accounts allowed. Please switch accounts.")
     except Exception as e:
@@ -176,7 +176,7 @@ if "user" in st.session_state:
     st.caption(u.get("email", ""))
     # Show a link button to search page also
     if st.button("Go to Search"):
-        st.switch_page("pages/SearchP.py")
+        st.switch_page("SearchP")
     st.divider()
     st.header("Protected area")
     st.write("Only SDSU-authenticated users can see this content.")
