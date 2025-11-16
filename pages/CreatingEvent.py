@@ -1,40 +1,26 @@
 import streamlit as st
+import random
 
 name = st.text_input("Name: ", placeholder = "Type here...")
 
 description = st.text_input("Description: ", placeholder= "Type here...")
 
-locations = ["GMCS", "Billy Joel"]
+times = ["8:00-8:30 AM", "8:30-9:00 AM", "9:00-9:30 AM", "9:30-10:00 AM", "10:00-10:30 AM", "10:30-11:00 AM", "11:00-11:30 AM", 
+         "11:30-12:00 PM", "12:00-12:30 PM", "12:30-1:00 PM", "1:00-1:30 PM", "1:30-2:00 PM", "2:00-2:30 PM", "2:30-3:00 PM",
+         "3:00-3:30 PM", "3:30-4:00 PM", "4:00-4:30 PM", "4:30-5:00 PM", "5:00-5:30 PM", "5:30-6:00 PM", "6:00-6:30 PM", "6:30-7:00 PM",
+         "7:00-7:30 PM", "7:30-8:00 PM", "8:00-8:30 PM", "8:30-9:00 PM", "9:00-9:30 PM", "9:30-10:00 PM"]
 
-norm_locs = {loc.strip().lower() for loc in locations}
-desc_norm = description.strip().lower()
+buildings = ["ARTHN", "AH", "AL", "BT", "COMM", "E", "ENS", "FAC", "GMCS"]
 
-st.session_state.setdefault("created", False)
-st.session_state.setdefault("created_name", "")
-def create_event(who: str):
-        st.session_state.created = True
-        st.session_state.created_name = who.strip()
+selected_time = st.selectbox("Choose a time:", options=times, index=None, placeholder="Select a time")
 
-if description:
-        if desc_norm in norm_locs:
-            st.warning("A Similar Group Exists!")
-            if st.button("Create"):
-                  if name.strip():
-                    create_event(name)
-        else: 
-            if st.button("Create!", use_container_width=True):
-                if name.strip():
-                    create_event(name)
-                else:
-                    st.warning("Please enter your name first.")
-                    
-if st.session_state.created:
-    st.success(f"Your Event Has Been Created!, {st.session_state.created_name}!")
-
-
-
-
-
-
-
-
+if st.button("Create!"):
+        if not name.strip():
+            st.warning("Please enter your name.")
+        elif not description.strip():
+            st.warning("Please enter a description.")
+        elif not selected_time:
+            st.warning("Please select a time.")
+        else:
+            random_building = random.choice(buildings)
+            when = st.success(f"{name.strip()} has created an event at {random_building} at {selected_time}. Have fun at: {description.strip()}")
