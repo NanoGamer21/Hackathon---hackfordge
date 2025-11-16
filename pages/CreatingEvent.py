@@ -1,9 +1,9 @@
 import streamlit as st
 import random
 
-name = st.text_input("Name: ", placeholder = "Type here...")
+name = st.text_input("Your Name: ", placeholder = "Type here...")
 
-description = st.text_input("Description: ", placeholder= "Type here...")
+description = st.text_input("Event Description: ", placeholder= "Type here...")
 
 times = ["8:00-8:30 AM", "8:30-9:00 AM", "9:00-9:30 AM", "9:30-10:00 AM", "10:00-10:30 AM", "10:30-11:00 AM", "11:00-11:30 AM", 
          "11:30-12:00 PM", "12:00-12:30 PM", "12:30-1:00 PM", "1:00-1:30 PM", "1:30-2:00 PM", "2:00-2:30 PM", "2:30-3:00 PM",
