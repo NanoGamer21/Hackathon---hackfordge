@@ -23,9 +23,10 @@ choice = st.selectbox(
     placeholder="Search"
 )
 
-if st.button("Got to Event"):
+if st.button("Go to Event"):
     if choice:
         st.session_state.choice = choice
         st.experimental_set_query_params(page="ExistingEvent.py")
+        st.switch_page("pages/ExistingEvent.py")
     else:
         st.warning("Please select a topic from the dropdown.")
