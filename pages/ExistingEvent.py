@@ -20,16 +20,22 @@ h1, h2, h3, h4, h5, h6{
 </style>
 """, unsafe_allow_html=True)
 
-# ---- Demo data helpers ----
-TIMES = ["8:00–8:30 AM", "8:30–9:00 AM", "9:00–9:30 AM", "9:30–10:00 AM",
-         "10:00–10:30 AM", "10:30–11:00 AM", "11:00–11:30 AM", "11:30–12:00 PM"]
+# ---- Time + demo helpers (now hourly) ----
+def hour_slots(start: int = 8, end: int = 22):
+    """Return ['8:00 AM–9:00 AM', ..., up to end)."""
+    def fmt(h):
+        suf = "AM" if h < 12 else "PM"
+        h12 = (h % 12) or 12
+        return f"{h12}:00 {suf}"
+    return [f"{fmt(h)}–{fmt(h+1)}" for h in range(start, end)]
+
 BUILDINGS = ["ARTHN", "AH", "AL", "BT", "COMM", "E", "ENS", "FAC", "GMCS"]
 
 def _rand_room():
     return f"{random.randint(100, 499)}{random.choice(string.ascii_uppercase)}"
 
 def build_demo_events(topic: str, n: int = 3):
-    times = random.sample(TIMES, k=min(n, len(TIMES)))
+    times = random.sample(hour_slots(), k=min(n, len(hour_slots())))
     buildings = random.sample(BUILDINGS, k=min(n, len(BUILDINGS)))
     events = []
     for i in range(len(times)):
@@ -42,6 +48,8 @@ def build_demo_events(topic: str, n: int = 3):
             "room": _rand_room(),
             "host": random.choice(["Alex", "Jordan", "Taylor", "Sam", "Riley"]),
             "spots_left": random.randint(3, 20),
+            # NEW: include a description so cards can show it
+            "description": f"A casual {topic} session. Come hang out and meet new people.",
         })
     return events
 
@@ -54,21 +62,23 @@ if not events:
 
 st.header(f"Events for: {topic}")
 
-# Cards
+# Cards (now also show description when present)
 labels = [
     f"{e['title']} — {e['time']} • {e['building']} {e['room']} • Host {e['host']} • {e['spots_left']} spots left"
     for e in events
 ]
 for e in events:
     with st.container(border=True):
-        st.subheader(f"{e['title']}")
+        st.subheader(e['title'])
         st.caption(f"{e['time']} • {e['building']} {e['room']} • Host {e['host']}")
+        if e.get("description"):
+            st.write(e["description"])
         st.progress(min(1.0, max(0.05, 1 - e['spots_left']/25)))
         st.write(f"Spots left: **{e['spots_left']}**")
 
 st.divider()
 
-# Select + actions (NO 'Create event' button here)
+# Select + actions
 idx_options = list(range(len(events)))
 selected_idx = st.selectbox(
     "Pick an event to join:",
