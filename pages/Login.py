@@ -59,14 +59,13 @@ if code:
         if email.endswith("@sdsu.edu"):
             st.session_state.user = user
             st.query_params.clear()  # clear the query params
-            # Redirect to SearchP page after login (must live at pages/SearchP.py)
-            st.switch_page("pages/SearchP.py")
+            st.switch_page("pages/SearchP.py")  # must exist at pages/SearchP.py
         else:
             st.error("Only @sdsu.edu accounts allowed. Please switch accounts.")
     except Exception as e:
         st.error(f"Login failed: {e}")
 
-# UI: same fonts and (default) background behavior as Search page
+# UI: same fonts/background as Search page, remove blue link highlight, darker hover
 st.markdown(
     """
     <style>
@@ -81,8 +80,6 @@ st.markdown(
         font-family: "Merriweather", Georgia, "Times New Roman", serif !important;
         letter-spacing: .2px;
       }
-
-      /* No background overrides: use Streamlit theme (same as Search page) */
 
       /* Header block */
       .header-container {
@@ -101,7 +98,15 @@ st.markdown(
         font-size: 38px;
       }
 
-      /* Transparent Google sign-in button (no inner border) */
+      /* Sign-in "button" (anchor) — no blue highlight, darker hover */
+      .sdsu-login,
+      .sdsu-login:link,
+      .sdsu-login:visited,
+      .sdsu-login:hover,
+      .sdsu-login:active {
+        color: inherit;               /* kill blue/purple link colors */
+        text-decoration: none;        /* remove underline */
+      }
       .sdsu-login {
         display: inline-flex;
         align-items: center;
@@ -109,18 +114,33 @@ st.markdown(
         gap: 10px;
         padding: 12px 20px;
         border-radius: 8px;
-        border: 0;                 /* no inner border so we only see the card border */
+        border: 0;                    /* no inner border; only outer card shows */
         font-size: 16px;
         font-weight: 600;
-        text-decoration: none;
         background: transparent;
-        color: inherit;            /* follow page text color */
         box-shadow: none;
-        transition: background-color .2s ease, transform .05s ease;
         cursor: pointer;
+        -webkit-tap-highlight-color: transparent;  /* remove mobile blue tap flash */
+        outline: none;                 /* remove default blue focus ring */
+        transition: background-color .2s ease, transform .05s ease;
       }
-      .sdsu-login:hover { background: rgba(0,0,0,0.05); }
+      /* Darker hover for both themes */
+      @media (prefers-color-scheme: light), (prefers-color-scheme: no-preference) {
+        .sdsu-login:hover { background: rgba(0,0,0,0.12); }  /* darker than before */
+      }
+      @media (prefers-color-scheme: dark) {
+        .sdsu-login:hover { background: rgba(255,255,255,0.18); } /* darker in dark mode */
+      }
       .sdsu-login:active { transform: translateY(1px); }
+      /* Optional custom focus (subtle, non-blue) for accessibility */
+      .sdsu-login:focus-visible {
+        box-shadow: 0 0 0 3px rgba(0,0,0,0.25);
+      }
+      @media (prefers-color-scheme: dark) {
+        .sdsu-login:focus-visible {
+          box-shadow: 0 0 0 3px rgba(255,255,255,0.25);
+        }
+      }
 
       /* Keep the Google icon readable */
       .sdsu-login img {
@@ -138,9 +158,12 @@ st.markdown(
 
       /* SINGLE subtle outer border around the whole area */
       .login-card {
-        border: 1px solid #e5e5e5;   /* subtle light border to match default theme */
+        border: 1px solid #e5e5e5;
         border-radius: 12px;
         padding: 20px 24px;
+      }
+      @media (prefers-color-scheme: dark) {
+        .login-card { border-color: #2a2a2a; }
       }
     </style>
 
@@ -155,7 +178,7 @@ st.markdown(
     unsafe_allow_html=True,
 )
 
-# If user is already logged in
+# Content
 if "user" in st.session_state:
     u = st.session_state.user
     st.success(f"Welcome, {u.get('name') or u.get('email')} ✅")
@@ -181,4 +204,3 @@ else:
         """,
         unsafe_allow_html=True,
     )
-
