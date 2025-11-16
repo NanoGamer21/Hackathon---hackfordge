@@ -107,10 +107,8 @@ if "user" in st.session_state:
     st.success(f"Welcome, {u.get('name') or u.get('email')} ✅")
     st.caption(u.get("email", ""))
     # Show a link button to search page also
-    st.page_link("pages/SearchP.py", label="Go to Search", icon="🔎")
-    if st.button("Sign out"):
-        st.session_state.pop("user", None)
-        st.experimental_set_query_params()
+    if st.button("Go to Search"):  
+        st.switch_page("pages/SearchP.py")
     st.divider()
     st.header("Protected area")
     st.write("Only SDSU-authenticated users can see this content.")
