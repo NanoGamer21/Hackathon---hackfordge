@@ -72,5 +72,5 @@ with st.container(border=True):
                 st.session_state.events = events
                 st.success(f"{user_name.strip()} created **{event_name.strip()}** at {random_building} at {selected_time}.")
     with cols[1]:
-        st.page_link("pages/SearchP.py", label=""Back to search", icon="🔎")
+        st.page_link("pages/SearchP.py", label="Back to search", icon="🔎")
 
