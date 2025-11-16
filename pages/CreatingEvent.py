@@ -27,4 +27,4 @@ if st.button("Create!"):
         st.warning("Please select a time.")
     else:
         random_building = random.choice(buildings)
-        when = st.success(f"{name.strip()} has created an event at {random_building} at {selected_time}. Have fun at: {description.strip()}")
+        when = st.success(f"{user_name.strip()} has created an event at {random_building} at {selected_time}. Have fun at: {event_name.strip()}")
