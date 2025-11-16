@@ -93,4 +93,3 @@ with col2:
         st.rerun()
 
 st.page_link("pages/SearchP.py", label="← Back to search", icon="🔎")
-
