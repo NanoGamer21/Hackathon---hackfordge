@@ -60,7 +60,7 @@ if "code" in qs:
             st.experimental_set_query_params()  # clear the query params
             # Redirect to SearchP page after login
             try:
-                st.switch_page("pages/SearchP.py")
+                st.switch_page("SearchP.py")
             except Exception:
                 # fallback: just show a link if switch_page isn't supported
                 st.markdown("[Continue to Search Page →](pages/SearchP.py)", unsafe_allow_html=True)
