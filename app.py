@@ -108,7 +108,7 @@ if "user" in st.session_state:
     st.caption(u.get("email", ""))
     # Show a link button to search page also
     if st.button("Go to Search"):  
-        st.switch_page("pages/SearchP.py")
+        st.switch_page("app_pages/SearchP.py")
     st.divider()
     st.header("Protected area")
     st.write("Only SDSU-authenticated users can see this content.")
@@ -153,4 +153,3 @@ else:
         """,
         unsafe_allow_html=True,
     )
-
