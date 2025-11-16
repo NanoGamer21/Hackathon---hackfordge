@@ -2,7 +2,7 @@ import streamlit as st
 import requests, urllib.parse, secrets
 
 # Page configuration
-st.set_page_config(page_title="Room Reserve", page_icon="🎓")
+st.set_page_config(page_title="Aztec Reserve", page_icon="🎓")
 
 # Google OAuth credentials from secrets
 CLIENT_ID = st.secrets["google"]["client_id"]
@@ -70,6 +70,8 @@ if code:
 st.markdown(
     """
     <style>
+      @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&family=Merriweather:wght@700;900&display=swap');
+      
       :root {
         --bg-light: #ffffff;
         --text-light: #111111;
@@ -78,6 +80,18 @@ st.markdown(
         --bg-dark: #000000;
         --text-dark: #ffffff;
         --border-dark: #2a2a2a;
+      }
+
+      /* Set body/UI font */
+      html, body, [data-testid="stAppViewContainer"]{
+        font-family: "Inter", system-ui, -apple-system, Segoe UI, Roboto, sans-serif !important;
+        -webkit-font-smoothing: antialiased; -moz-osx-font-smoothing: grayscale;
+      }
+
+      /* Headings look more SDSU-like */
+      h1, h2, h3, h4, h5, h6{
+        font-family: "Merriweather", Georgia, "Times New Roman", serif !important;
+        letter-spacing: .2px;
       }
 
       /* Defaults (light as baseline) */
@@ -94,15 +108,15 @@ st.markdown(
           color: var(--text-dark) !important;
         }
         .login-card { border-color: var(--border-dark); }
-        .sdsu-login { color: var(--text-dark); }
-        .sdsu-login:hover { background: rgba(255,255,255,0.08); }
+        .sdsu-login { color: var(--text-dark); border-color: var(--border-dark); }
+        .sdsu-login:hover { background: rgba(255,255,255,0.05); }
       }
 
       /* Prefer LIGHT mode (and no-preference falls back here) */
       @media (prefers-color-scheme: light), (prefers-color-scheme: no-preference) {
         .login-card { border-color: var(--border-light); }
-        .sdsu-login { color: var(--text-light); }
-        .sdsu-login:hover { background: rgba(0,0,0,0.06); }
+        .sdsu-login { color: var(--text-light); border-color: var(--border-light); }
+        .sdsu-login:hover { background: rgba(0,0,0,0.03); }
       }
 
       /* Header block */
@@ -119,12 +133,11 @@ st.markdown(
       }
       .header-inner h1 {
         margin: 0;
-        font-family: sans-serif;
         font-size: 38px;
         color: inherit; /* follow mode text color */
       }
 
-      /* Transparent Google sign-in button (NO border; single outer card border only) */
+      /* Input-style sign-in button */
       .sdsu-login {
         display: inline-flex;
         align-items: center;
@@ -132,13 +145,16 @@ st.markdown(
         gap: 10px;
         padding: 12px 20px;
         border-radius: 8px;
+        border: 1px solid;
         font-size: 16px;
         font-weight: 600;
         text-decoration: none;
         background: transparent;
         box-shadow: none;
-        transition: background-color .2s ease, color .2s ease, transform .05s ease;
+        transition: background-color .2s ease, color .2s ease, border-color .2s ease, transform .05s ease;
+        cursor: pointer;
       }
+      .sdsu-login:hover { transform: scale(1.01); }
       .sdsu-login:active { transform: translateY(1px); }
 
       /* Keep the Google icon readable */
@@ -167,7 +183,7 @@ st.markdown(
       <div class="header-inner">
         <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/5/59/San_Diego_State_University_primary_logo.svg/2560px-San_Diego_State_University_primary_logo.svg.png"
              width="280" style="margin-top:-10px;">
-        <h1>Room Reserve</h1>
+        <h1>Aztec Reserve</h1>
       </div>
     </div>
     """,
