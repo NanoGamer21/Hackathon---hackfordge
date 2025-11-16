@@ -5,7 +5,22 @@ import string
 
 st.set_page_config(page_title="Existing Events", layout="wide")
 
-# Fallback demo builder if page is opened directly
+# ---- Typography to match Search page ----
+st.markdown("""
+<style>
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&family=Merriweather:wght@700;900&display=swap');
+html, body, [data-testid="stAppViewContainer"]{
+  font-family: "Inter", system-ui, -apple-system, Segoe UI, Roboto, sans-serif !important;
+  -webkit-font-smoothing: antialiased; -moz-osx-font-smoothing: grayscale;
+}
+h1, h2, h3, h4, h5, h6{
+  font-family: "Merriweather", Georgia, "Times New Roman", serif !important;
+  letter-spacing: .2px;
+}
+</style>
+""", unsafe_allow_html=True)
+
+# ---- Demo data helpers ----
 TIMES = ["8:00–8:30 AM", "8:30–9:00 AM", "9:00–9:30 AM", "9:30–10:00 AM",
          "10:00–10:30 AM", "10:30–11:00 AM", "11:00–11:30 AM", "11:30–12:00 PM"]
 BUILDINGS = ["ARTHN", "AH", "AL", "BT", "COMM", "E", "ENS", "FAC", "GMCS"]
@@ -30,34 +45,30 @@ def build_demo_events(topic: str, n: int = 3):
         })
     return events
 
-topic = st.session_state.get("choice")
+# ---- Get state ----
+topic = st.session_state.get("choice") or "Featured"
 events = st.session_state.get("events")
-
-if not topic:
-    topic = "Featured"
 if not events:
     events = build_demo_events(topic, n=3)
     st.session_state.events = events
 
 st.header(f"Events for: {topic}")
 
-# Show the three demo events as cards + a selector
+# Cards
 labels = [
     f"{e['title']} — {e['time']} • {e['building']} {e['room']} • Host {e['host']} • {e['spots_left']} spots left"
     for e in events
 ]
-
-# Pretty cards
 for e in events:
     with st.container(border=True):
         st.subheader(f"{e['title']}")
         st.caption(f"{e['time']} • {e['building']} {e['room']} • Host {e['host']}")
-        st.progress(min(1.0, max(0.05, 1 - e['spots_left']/25)))  # playful fill
+        st.progress(min(1.0, max(0.05, 1 - e['spots_left']/25)))
         st.write(f"Spots left: **{e['spots_left']}**")
 
 st.divider()
 
-# Selection + join
+# Select + actions (NO 'Create event' button here)
 idx_options = list(range(len(events)))
 selected_idx = st.selectbox(
     "Pick an event to join:",
@@ -81,4 +92,5 @@ with col2:
         st.session_state.events = build_demo_events(topic, n=3)
         st.rerun()
 
-st.page_link("pages/SearchP.py", label="← Back to search", icon="↩️")
+st.page_link("pages/SearchP.py", label="← Back to search", icon="🔎")
+
