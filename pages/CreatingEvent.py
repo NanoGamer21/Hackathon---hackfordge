@@ -68,9 +68,10 @@ with st.container(border=True):
                     "description": description.strip(),
                 }
                 events = st.session_state.get("events", [])
-                events.insert(0, new_event)  # put it first
+                events.insert(0, new_event)              # store new event first
                 st.session_state.events = events
+                st.session_state.choice = new_event["topic"]  # preselect this topic
                 st.success(f"{user_name.strip()} created **{event_name.strip()}** at {random_building} at {selected_time}.")
+                st.switch_page("pages/SearchP.py")       # go back to dropdown
     with cols[1]:
         st.page_link("pages/SearchP.py", label="Back to search", icon="🔎")
-
