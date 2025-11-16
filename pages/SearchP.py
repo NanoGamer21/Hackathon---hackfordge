@@ -30,3 +30,7 @@ if st.button("Go to Event"):
         st.switch_page("pages/ExistingEvent.py")
     else:
         st.warning("Please select a topic from the dropdown.")
+
+st.write("Don't see an event you like?")
+if st.button("Create one!", use_container_width=True,):
+    st.switch_page("pages/CreatingEvent.py")
