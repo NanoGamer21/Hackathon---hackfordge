@@ -73,6 +73,20 @@ if "code" in qs:
 st.markdown(
     """
     <style>
+        /* SDSU colors */
+        :root{
+            --sdsu-red: #C41E3A;
+            --sdsu-red-dark: #a9152f;
+        }
+
+        /* Make the app background SDSU red and cover the whole viewport */
+        html, body, .stApp, .main, .block-container {
+            background-color: var(--sdsu-red) !important;
+            color: #ffffff !important;
+            min-height: 100vh;
+        }
+
+        /* Header styles */
         .header-container {
             display: flex;
             flex-direction: column;
@@ -88,8 +102,66 @@ st.markdown(
             margin: 0;
             font-family: sans-serif;
             font-size: 38px;
+            color: #ffffff;
+        }
+
+        /* Button base */
+        .sdsu-login {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            gap: 10px;
+            padding: 12px 20px;
+            border-radius: 8px;
+            font-size: 16px;
+            font-weight: 600;
+            text-decoration: none;
+            transition: background-color 0.2s ease, color 0.2s ease;
+            box-shadow: 0 2px 6px rgba(0,0,0,0.12);
+        }
+        .sdsu-login img {
+            background: white;
+            border-radius: 50%;
+            padding: 2px;
+        }
+
+        /* Light-mode: keep SDSU red button with white text */
+        @media (prefers-color-scheme: light), (prefers-color-scheme: no-preference) {
+            .sdsu-login {
+                background-color: var(--sdsu-red);
+                color: #ffffff;
+            }
+            .sdsu-login:hover {
+                background-color: var(--sdsu-red-dark);
+                color: #ffffff;
+            }
+        }
+
+        /* Dark-mode: invert button so it is light on the red background (better contrast) */
+        @media (prefers-color-scheme: dark) {
+            .sdsu-login {
+                background-color: #ffffff;
+                color: var(--sdsu-red);
+            }
+            .sdsu-login:hover {
+                background-color: #f2f2f2;
+                color: var(--sdsu-red-dark);
+            }
+
+            /* If Streamlit adds any dark-mode page-level styles, force the SDSU red app background */
+            html, body, .stApp, .main, .block-container {
+                background-color: var(--sdsu-red) !important;
+                color: #ffffff !important;
+            }
+        }
+
+        .center {
+            display: flex;
+            justify-content: center;
+            margin-top: 60px;
         }
     </style>
+
     <div class="header-container">
         <div class="header-inner">
             <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/5/59/San_Diego_State_University_primary_logo.svg/2560px-San_Diego_State_University_primary_logo.svg.png"
@@ -107,7 +179,7 @@ if "user" in st.session_state:
     st.success(f"Welcome, {u.get('name') or u.get('email')} ✅")
     st.caption(u.get("email", ""))
     # Show a link button to search page also
-    if st.button("Go to Search"):  
+    if st.button("Go to Search"):
         st.switch_page("app_pages/SearchP.py")
     st.divider()
     st.header("Protected area")
@@ -116,37 +188,10 @@ else:
     url = login_link(st.session_state.state)
     st.markdown(
         f"""
-        <style>
-        .sdsu-login {{
-            display: inline-flex;
-            align-items: center;
-            justify-content: center;
-            gap: 10px;
-            padding: 12px 20px;
-            background-color: #C41E3A;
-            color: white;
-            border-radius: 8px;
-            font-size: 16px;
-            font-weight: 600;
-            text-decoration: none;
-            transition: background-color 0.2s ease;
-        }}
-        .sdsu-login:hover {{ background-color: #a9152f; }}
-        .sdsu-login img {{
-            background: white;
-            border-radius: 50%;
-            padding: 2px;
-        }}
-        .center {{
-            display: flex;
-            justify-content: center;
-            margin-top: 60px;
-        }}
-        </style>
         <div class="center">
-            <a href="{url}" class="sdsu-login">
+            <a href="{url}" class="sdsu-login" role="button" aria-label="Sign in with SDSU">
                 <img src="https://www.gstatic.com/firebasejs/ui/2.0.0/images/auth/google.svg"
-                     width="22" height="22">
+                     width="22" height="22" alt="Google logo">
                 Sign in with SDSU
             </a>
         </div>
