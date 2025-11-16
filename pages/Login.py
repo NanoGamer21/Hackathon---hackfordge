@@ -66,15 +66,43 @@ if code:
     except Exception as e:
         st.error(f"Login failed: {e}")
 
-# UI: Styles (black background + transparent sign-in button + outer border card)
+# UI: Styles (background respects user’s light/dark settings, ONE outer border only)
 st.markdown(
     """
     <style>
-      /* App background + default text */
+      :root {
+        --bg-light: #ffffff;
+        --text-light: #111111;
+        --border-light: #e5e5e5;
+
+        --bg-dark: #000000;
+        --text-dark: #ffffff;
+        --border-dark: #2a2a2a;
+      }
+
+      /* Defaults (light as baseline) */
       html, body, .stApp, .main, .block-container {
-        background: #000 !important;
-        color: #fff !important;
+        background: var(--bg-light) !important;
+        color: var(--text-light) !important;
         min-height: 100vh;
+      }
+
+      /* Prefer DARK mode */
+      @media (prefers-color-scheme: dark) {
+        html, body, .stApp, .main, .block-container {
+          background: var(--bg-dark) !important;
+          color: var(--text-dark) !important;
+        }
+        .login-card { border-color: var(--border-dark); }
+        .sdsu-login { color: var(--text-dark); }
+        .sdsu-login:hover { background: rgba(255,255,255,0.08); }
+      }
+
+      /* Prefer LIGHT mode (and no-preference falls back here) */
+      @media (prefers-color-scheme: light), (prefers-color-scheme: no-preference) {
+        .login-card { border-color: var(--border-light); }
+        .sdsu-login { color: var(--text-light); }
+        .sdsu-login:hover { background: rgba(0,0,0,0.06); }
       }
 
       /* Header block */
@@ -93,10 +121,10 @@ st.markdown(
         margin: 0;
         font-family: sans-serif;
         font-size: 38px;
-        color: #ffffff;
+        color: inherit; /* follow mode text color */
       }
 
-      /* Transparent Google sign-in button */
+      /* Transparent Google sign-in button (NO border; single outer card border only) */
       .sdsu-login {
         display: inline-flex;
         align-items: center;
@@ -108,15 +136,8 @@ st.markdown(
         font-weight: 600;
         text-decoration: none;
         background: transparent;
-        color: #fff;
-        border: 2px solid #fff;   /* button border */
         box-shadow: none;
-        transition: background-color .2s ease, color .2s ease, border-color .2s ease, transform .05s ease;
-      }
-      .sdsu-login:hover {
-        background: rgba(255,255,255,0.08);
-        color: #fff;
-        border-color: #fff;
+        transition: background-color .2s ease, color .2s ease, transform .05s ease;
       }
       .sdsu-login:active { transform: translateY(1px); }
 
@@ -134,9 +155,9 @@ st.markdown(
         margin-top: 60px;
       }
 
-      /* Outer card border around the whole button area */
-      .login-card{
-        border: 2px solid #fff;   /* outer border */
+      /* SINGLE outer border around the whole area */
+      .login-card {
+        border: 2px solid;   /* color set per mode above */
         border-radius: 12px;
         padding: 20px 24px;
       }
@@ -180,3 +201,4 @@ else:
         """,
         unsafe_allow_html=True,
     )
+
