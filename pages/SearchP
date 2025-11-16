@@ -1,21 +1,40 @@
 import streamlit as st
 
-st.set_page_config(page_title="Demo", layout="centered")
+# Page setup
+st.set_page_config(page_title="SearchP", page_icon="🔎", layout="centered")
 
-# Your existing topics for the dropdown
+# Auth gate: only allow if signed in
+if "user" not in st.session_state:
+    st.error("Please sign in with your @sdsu.edu account to continue.")
+    st.stop()
+
+# Header
+st.markdown(
+    """
+    <div style="display:flex; flex-direction:column; align-items:center; margin-top:-10px;">
+        <h1 style="margin:0; font-family:sans-serif;">Search a Subject</h1>
+    </div>
+    """,
+    unsafe_allow_html=True
+)
+
+# Topics
 topics = ["Dungeons & Dragons", "CS Study Sesh", "LOCKIN IN ON EXAMS", "Math Club", "Clash Royale"]
 topics = sorted(topics, key=str.casefold)
-st.title("Search a Subject")
 
-# A. Dropdown that filters as you type
+# Searchable dropdown
 choice = st.selectbox(
     "Choose a topic (type to filter):",
     options=topics,
-    index=None,                               # so nothing is preselected
+    index=None,
     placeholder="Search"
 )
 
-topic = choice 
+# Create event button (enabled only when a topic is selected)
+disabled = choice is None
+if st.button("Create an Event!", use_container_width=True, disabled=disabled):
+    st.success(f"Event created for: {choice}")
 
-if st.button("Creat an Event!", use_container_width=True):
-    st.write("Hello!")
+# Show current selection
+if choice:
+    st.info(f"Selected: {choice}")
