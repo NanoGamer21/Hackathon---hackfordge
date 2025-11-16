@@ -1,7 +1,9 @@
 import streamlit as st
 import random
 
-name = st.text_input("Your Name: ", placeholder = "Type here...")
+user_name = st.text_input("Your Name: ", placeholder = "Type here...")
+
+event_name = st.text_input("Event Name: ", placeholder = "Type here...")
 
 description = st.text_input("Event Description: ", placeholder= "Type here...")
 
@@ -15,12 +17,14 @@ buildings = ["ARTHN", "AH", "AL", "BT", "COMM", "E", "ENS", "FAC", "GMCS"]
 selected_time = st.selectbox("Choose a time:", options=times, index=None, placeholder="Select a time")
 
 if st.button("Create!"):
-        if not name.strip():
-            st.warning("Please enter your name.")
-        elif not description.strip():
-            st.warning("Please enter a description.")
-        elif not selected_time:
-            st.warning("Please select a time.")
-        else:
-            random_building = random.choice(buildings)
-            when = st.success(f"{name.strip()} has created an event at {random_building} at {selected_time}. Have fun at: {description.strip()}")
+    if not user_name.strip():
+        st.warning("Please enter your name.")
+    elif not event_name.strip():
+        st.warning("Please enter your event name.")
+    elif not description.strip():
+        st.warning("Please enter a description.")
+    elif not selected_time:
+        st.warning("Please select a time.")
+    else:
+        random_building = random.choice(buildings)
+        when = st.success(f"{name.strip()} has created an event at {random_building} at {selected_time}. Have fun at: {description.strip()}")
