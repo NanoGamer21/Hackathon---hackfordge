@@ -5,7 +5,7 @@ import string
 
 st.set_page_config(page_title="Search Events", layout="wide")
 
-# Typography to match the rest of the app
+# ---- Typography ----
 st.markdown("""
 <style>
 @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&family=Merriweather:wght@700;900&display=swap');
@@ -20,17 +20,22 @@ h1, h2, h3, h4, h5, h6{
 </style>
 """, unsafe_allow_html=True)
 
-# Demo/base data
+# ---- Base data + helpers ----
 BASE_TOPICS = ["Dungeons & Dragons", "CS Study Sesh", "LOCKIN IN ON EXAMS", "Math Club", "Clash Royale"]
-TIMES = ["8:00–8:30 AM", "8:30–9:00 AM", "9:00–9:30 AM", "9:30–10:00 AM",
-         "10:00–10:30 AM", "10:30–11:00 AM", "11:00–11:30 AM", "11:30–12:00 PM"]
 BUILDINGS = ["ARTHN", "AH", "AL", "BT", "COMM", "E", "ENS", "FAC", "GMCS"]
+
+def hour_slots(start: int = 8, end: int = 22):
+    def fmt(h):
+        suf = "AM" if h < 12 else "PM"
+        h12 = (h % 12) or 12
+        return f"{h12}:00 {suf}"
+    return [f"{fmt(h)}–{fmt(h+1)}" for h in range(start, end)]
 
 def _rand_room():
     return f"{random.randint(100, 499)}{random.choice(string.ascii_uppercase)}"
 
 def build_demo_events(topic: str, n: int = 3):
-    times = random.sample(TIMES, k=min(n, len(TIMES)))
+    times = random.sample(hour_slots(), k=min(n, len(hour_slots())))
     buildings = random.sample(BUILDINGS, k=min(n, len(BUILDINGS)))
     events = []
     for i in range(len(times)):
@@ -38,11 +43,12 @@ def build_demo_events(topic: str, n: int = 3):
             "id": f"evt_{random.randint(1000,9999)}",
             "topic": topic,
             "title": f"{topic} Meetup",
-            "time": times[i],
+            "time": times[i],                      # 1-hour block
             "building": buildings[i],
             "room": _rand_room(),
             "host": random.choice(["Alex", "Jordan", "Taylor", "Sam", "Riley"]),
             "spots_left": random.randint(3, 20),
+            "description": f"Join us for {topic}! Bring a friend and have fun.",  # NEW
         })
     return events
 
@@ -74,7 +80,6 @@ choice = st.selectbox(
 if st.button("See Events", use_container_width=True):
     if choice:
         st.session_state.choice = choice
-        # Only build fresh demo events if none exist yet for this topic
         if not st.session_state.get("events"):
             st.session_state.events = build_demo_events(choice, n=3)
         st.switch_page("pages/ExistingEvent.py")
