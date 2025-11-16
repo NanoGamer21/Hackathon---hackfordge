@@ -43,5 +43,5 @@ choice = st.selectbox(
 topic = choice 
 st.write("Don't see an event you like?")
 if st.button("Create one!", use_container_width=True,):
-    st.switch_page("CreatingEvent.py")
+    st.switch_page("pages/CreatingEvent.py")
 
