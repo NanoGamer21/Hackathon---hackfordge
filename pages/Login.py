@@ -66,58 +66,23 @@ if code:
     except Exception as e:
         st.error(f"Login failed: {e}")
 
-# UI: Styles (background respects user’s light/dark settings, ONE outer border only)
+# UI: same fonts and (default) background behavior as Search page
 st.markdown(
     """
     <style>
       @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&family=Merriweather:wght@700;900&display=swap');
-      
-      :root {
-        --bg-light: #ffffff;
-        --text-light: #111111;
-        --border-light: #e5e5e5;
 
-        --bg-dark: #000000;
-        --text-dark: #ffffff;
-        --border-dark: #2a2a2a;
-      }
-
-      /* Set body/UI font */
+      /* Match Search page typography */
       html, body, [data-testid="stAppViewContainer"]{
         font-family: "Inter", system-ui, -apple-system, Segoe UI, Roboto, sans-serif !important;
         -webkit-font-smoothing: antialiased; -moz-osx-font-smoothing: grayscale;
       }
-
-      /* Headings look more SDSU-like */
       h1, h2, h3, h4, h5, h6{
         font-family: "Merriweather", Georgia, "Times New Roman", serif !important;
         letter-spacing: .2px;
       }
 
-      /* Defaults (light as baseline) */
-      html, body, .stApp, .main, .block-container {
-        background: var(--bg-light) !important;
-        color: var(--text-light) !important;
-        min-height: 100vh;
-      }
-
-      /* Prefer DARK mode */
-      @media (prefers-color-scheme: dark) {
-        html, body, .stApp, .main, .block-container {
-          background: var(--bg-dark) !important;
-          color: var(--text-dark) !important;
-        }
-        .login-card { border-color: var(--border-dark); }
-        .sdsu-login { color: var(--text-dark); border-color: var(--border-dark); }
-        .sdsu-login:hover { background: rgba(255,255,255,0.05); }
-      }
-
-      /* Prefer LIGHT mode (and no-preference falls back here) */
-      @media (prefers-color-scheme: light), (prefers-color-scheme: no-preference) {
-        .login-card { border-color: var(--border-light); }
-        .sdsu-login { color: var(--text-light); border-color: var(--border-light); }
-        .sdsu-login:hover { background: rgba(0,0,0,0.03); }
-      }
+      /* No background overrides: use Streamlit theme (same as Search page) */
 
       /* Header block */
       .header-container {
@@ -134,10 +99,9 @@ st.markdown(
       .header-inner h1 {
         margin: 0;
         font-size: 38px;
-        color: inherit; /* follow mode text color */
       }
 
-      /* Input-style sign-in button */
+      /* Transparent Google sign-in button (no inner border) */
       .sdsu-login {
         display: inline-flex;
         align-items: center;
@@ -145,16 +109,17 @@ st.markdown(
         gap: 10px;
         padding: 12px 20px;
         border-radius: 8px;
-        border: 1px solid;
+        border: 0;                 /* no inner border so we only see the card border */
         font-size: 16px;
         font-weight: 600;
         text-decoration: none;
         background: transparent;
+        color: inherit;            /* follow page text color */
         box-shadow: none;
-        transition: background-color .2s ease, color .2s ease, border-color .2s ease, transform .05s ease;
+        transition: background-color .2s ease, transform .05s ease;
         cursor: pointer;
       }
-      .sdsu-login:hover { transform: scale(1.01); }
+      .sdsu-login:hover { background: rgba(0,0,0,0.05); }
       .sdsu-login:active { transform: translateY(1px); }
 
       /* Keep the Google icon readable */
@@ -171,9 +136,9 @@ st.markdown(
         margin-top: 60px;
       }
 
-      /* SINGLE outer border around the whole area */
+      /* SINGLE subtle outer border around the whole area */
       .login-card {
-        border: 2px solid;   /* color set per mode above */
+        border: 1px solid #e5e5e5;   /* subtle light border to match default theme */
         border-radius: 12px;
         padding: 20px 24px;
       }
@@ -182,7 +147,7 @@ st.markdown(
     <div class="header-container">
       <div class="header-inner">
         <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/5/59/San_Diego_State_University_primary_logo.svg/2560px-San_Diego_State_University_primary_logo.svg.png"
-             width="280" style="margin-top:-10px;">
+             width="240" style="margin-top:-6px;">
         <h1>Aztec Reserve</h1>
       </div>
     </div>
@@ -195,7 +160,6 @@ if "user" in st.session_state:
     u = st.session_state.user
     st.success(f"Welcome, {u.get('name') or u.get('email')} ✅")
     st.caption(u.get("email", ""))
-    # Show a button to go to search page (must be at pages/SearchP.py)
     if st.button("Go to Search", use_container_width=True):
         st.switch_page("pages/SearchP.py")
     st.divider()
